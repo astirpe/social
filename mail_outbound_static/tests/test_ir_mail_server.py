@@ -4,6 +4,7 @@
 import logging
 import os
 from email import message_from_string
+from unittest.mock import patch
 
 import odoo.tools as tools
 from odoo.exceptions import ValidationError
@@ -213,6 +214,8 @@ class TestIrMailServer(TransactionCase, MockSmtplibCase):
             ),
         )
 
+    @patch.dict(tools.config.options, {"smtp_from": "admin@example.com"})
+    @patch.dict(tools.config.options, {"smtp_domain_whitelist": "example.com"})
     def test_04_from_outgoing_server_none_use_config(self):
         self._init_mail_server_domain_whilelist_based()
         domain = "example.com"
@@ -241,6 +244,8 @@ class TestIrMailServer(TransactionCase, MockSmtplibCase):
             used_mail_server, f"using this mail server {used_mail_server.name}"
         )
 
+    @patch.dict(tools.config.options, {"smtp_from": "admin@example.com"})
+    @patch.dict(tools.config.options, {"smtp_domain_whitelist": "example.com"})
     def test_05_from_outgoing_server_none_same_domain(self):
         self._init_mail_server_domain_whilelist_based()
 
